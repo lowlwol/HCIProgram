@@ -1,11 +1,15 @@
-# fpi = open("Matrix_R.txt", "r")
-# fpo = open("Matrix_C.txt", "w")
-# C = eval(fpi.read())
-# print(type(C))
-
 import numpy as np
 
-a = [[3, 4], [5, 6]]
-b = [[1, 2], [7, 8]]
-print(np.vdot(a, b))
+fpi = open("Matrix_C.txt", "r")
+fpo = open("Matrix_D.txt", "w")
+C = eval(fpi.read())
+D = [[0 for i in range(0, 8)] for j in range(0, 16)]
 
+for i in range(0, 16):
+    for j in range(0, 8):
+        D[i][j] = 100 - C[i][j]
+
+fpo.write(str(D))
+
+fpo.close()
+fpi.close()
