@@ -20,7 +20,7 @@ def OutputMatrix(file_path, M):
 # only runs once to generate matrix p, 
 def GenMatrixP():
     L = GetMatrix("Matrix_L.txt")
-    C = GetMatrix("Matrix_C.txt")
+    C = GetMatrix("Matrix_D.txt")
     P = [[0 for i in range(0, 26)] for j in range(0, 26)]
     for i in range(0,26):
         for j in range(0, 26):
