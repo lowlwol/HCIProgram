@@ -39,3 +39,24 @@ def GetComfort(f):
     R = func.GetMatrix("Matrix_R.txt")
     S = func.GenMatrixS(R, f)
     return np.vdot(P, S)
+
+'''
+    i       index of key groups
+    fpo     file pointer of output file
+
+    return
+        min_f   f of min w in 
+        min_w   min w value
+'''
+def Traversing(fpo):
+    # TODO
+    return min_f, min_w
+
+'''
+    return
+        True    Amount of optimization keep changing
+        False   Amount of optimization change too slow 
+'''
+def JudgeOpt(min_w):
+    # TODO
+    return
