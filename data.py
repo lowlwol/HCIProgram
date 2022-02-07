@@ -7,5 +7,6 @@ f = [(25 - i) for i in range(0, 26)]
 
 # KeyGroup divides keys into 5 groups and record their indexes
 # LetterGroup shows the letters in each groups
+# TODO: 
 KeyGroup = []
 LetterGroup = []
