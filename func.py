@@ -1,5 +1,6 @@
 import numpy as np
-import func
+import itertools as it
+from data import KeyGroup, LetterGroup, f, MIN_CYCLE_NUM 
 
 ''' 
     file I/O
@@ -34,29 +35,49 @@ def GenMatrixS(R, f):
             S[i][j] = R[f[i]][f[j]]
     return S
 
-def GetComfort(f):
-    P = func.GetMatrix("Matrix_P.txt")
-    R = func.GetMatrix("Matrix_R.txt")
-    S = func.GenMatrixS(R, f)
+def GetComfort(P, R, f):
+    S = GenMatrixS(R, f)
     return np.vdot(P, S)
 
 '''
-    i       index of key groups
     fpo     file pointer of output file
 
     return
         min_f   f of min w in 
         min_w   min w value
 '''
-def Traversing(fpo):
-    # TODO
-    return min_f, min_w
+def Traversing(P, R, fpo):
+    min_f = np.zeros(26)
+
+    '''
+        caution: here we consume that w is always less than 20000000
+        TODO: the value need to examed 
+    '''
+    min_w = float(20000000.)
+
+    for i in range(0, 5):
+        lenth = len(LetterGroup[i])
+        for tItem in it.permutations(LetterGroup[i], lenth):    # traversing in a group
+            item = np.reshape(tItem, lenth)                     # trans tuple into tensor
+            for j in range(0, lenth):
+                f[KeyGroup[i][j]] = item[j]
+            w = GetComfort(P, R, f)
+            if w < min_w:
+                min_w = w
+                min_f = f[:]                                    # shallow copy
+
+    return min_w, min_f
 
 '''
     return
-        True    Amount of optimization keep changing
-        False   Amount of optimization change too slow 
+        True    Amount of optimization keeps changing
+        False   Amount of optimization changes too slow 
 '''
-def JudgeOpt(min_w):
-    # TODO
-    return
+def JudgeOpt(list_w):
+    # TODO: optimize the judging funcion
+    if len(list_w) < MIN_CYCLE_NUM:
+        return True
+    if list_w[-1] - list_w[-2] > 100:
+        return True
+
+    return False

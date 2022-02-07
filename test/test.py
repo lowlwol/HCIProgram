@@ -1,15 +1,8 @@
 import numpy as np
+import itertools as it
 
-fpi = open("Matrix_C.txt", "r")
-fpo = open("Matrix_D.txt", "w")
-C = eval(fpi.read())
-D = [[0 for i in range(0, 8)] for j in range(0, 16)]
+A = [3, 4, 5]
 
-for i in range(0, 16):
-    for j in range(0, 8):
-        D[i][j] = 100 - C[i][j]
-
-fpo.write(str(D))
-
-fpo.close()
-fpi.close()
+for item in it.permutations(A, len(A)):
+    B = np.reshape(item, 3)
+    print(item, B)
