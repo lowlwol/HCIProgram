@@ -1,6 +1,7 @@
 import numpy as np
 import itertools as it
-from data import KeyGroup, LetterGroup, f, MIN_CYCLE_NUM 
+import data
+from data import KeyGroup, LetterGroup, MIN_CYCLE_NUM
 
 ''' 
     file I/O
@@ -40,23 +41,18 @@ def GetComfort(P, R, f):
     return np.vdot(P, S)
 
 '''
-    fpo     file pointer of output file
-
     return
         min_f   f of min w in 
         min_w   min w value
 '''
-def Traversing(P, R, fpo):
-    min_f = np.zeros(26)
-
-    '''
-        caution: here we consume that w is always less than 20000000
-        TODO: the value need to examed 
-    '''
+def Traversing(P, R):
+    min_f = data.f_init
+    # here we consume that w is always less than 20000000
     min_w = float(20000000.)
 
     for i in range(0, 5):
         lenth = len(LetterGroup[i])
+        f = min_f[:]
         for tItem in it.permutations(LetterGroup[i], lenth):    # traversing in a group
             item = np.reshape(tItem, lenth)                     # trans tuple into tensor
             for j in range(0, lenth):
@@ -65,6 +61,8 @@ def Traversing(P, R, fpo):
             if w < min_w:
                 min_w = w
                 min_f = f[:]                                    # shallow copy
+            
+        print("\t{}\t{}\t{}".format(i, min_w, min_f))
 
     return min_w, min_f
 
@@ -77,6 +75,7 @@ def JudgeOpt(list_w):
     # TODO: optimize the judging funcion
     if len(list_w) < MIN_CYCLE_NUM:
         return True
+
     if list_w[-1] - list_w[-2] > 100:
         return True
 
