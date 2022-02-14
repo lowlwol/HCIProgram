@@ -1,7 +1,14 @@
+from glob import glob
 import numpy as np
 import itertools as it
 import data
 from data import KeyGroup, LetterGroup, MIN_CYCLE_NUM
+
+
+global min_w, min_f
+min_f = data.f_init
+min_w = float(6963200.304931576)
+
 
 ''' 
     file I/O
@@ -29,6 +36,7 @@ def GenMatrixP():
             P[i][j]= np.vdot(L[i][j], C)
     OutputMatrix("Matrix_P.txt", P)
 
+
 def GenMatrixS(R, f):
     S = np.zeros([26, 26], dtype=float)
     for i in range(0, 26):
@@ -36,9 +44,11 @@ def GenMatrixS(R, f):
             S[i][j] = R[f[i]][f[j]]
     return S
 
+
 def GetComfort(P, R, f):
     S = GenMatrixS(R, f)
     return np.vdot(P, S)
+
 
 '''
     return
@@ -46,12 +56,14 @@ def GetComfort(P, R, f):
         min_w   min w value
 '''
 def Traversing(P, R):
-    min_f = data.f_init
-    # here we consume that w is always less than 20000000
-    min_w = float(20000000.)
+    global min_f, min_w
 
-    for i in range(0, 5):
+    w = GetComfort(P, R, min_f)
+    print("\t{}\t{}\t{}".format(-1, w, min_f))
+
+    for i in range(0, 3):
         lenth = len(LetterGroup[i])
+        temp = min_w
         f = min_f[:]
         for tItem in it.permutations(LetterGroup[i], lenth):    # traversing in a group
             item = np.reshape(tItem, lenth)                     # trans tuple into tensor
@@ -61,10 +73,13 @@ def Traversing(P, R):
             if w < min_w:
                 min_w = w
                 min_f = f[:]                                    # shallow copy
-            
+            if w/temp <= 0.99:
+               break
+
         print("\t{}\t{}\t{}".format(i, min_w, min_f))
 
     return min_w, min_f
+
 
 '''
     return
@@ -72,11 +87,10 @@ def Traversing(P, R):
         False   Amount of optimization changes too slow 
 '''
 def JudgeOpt(list_w):
-    # TODO: optimize the judging funcion
     if len(list_w) < MIN_CYCLE_NUM:
         return True
 
-    if list_w[-1] - list_w[-2] > 100:
+    if list_w[-2] - list_w[-1] > 100:
         return True
 
     return False
